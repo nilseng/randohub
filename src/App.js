@@ -28,14 +28,19 @@ function App() {
       <div
         style={{ width: "100vw", minHeight: "100vh", backgroundColor: "black" }}
       >
-        <Container style={{ padding: "1rem" }}>
+        <Container style={{ padding: "1rem 0" }}>
           <Card
-            style={{ padding: "1rem", margin: "1rem", width: "27rem" }}
+            style={{
+              padding: "1rem",
+              margin: "1rem 0",
+              width: "27rem",
+              maxWidth: "100%",
+            }}
             bg="dark"
           >
             <Card.Img
               src={synshorn_img}
-              style={{ width: "25rem", paddingBottom: "1rem" }}
+              style={{ width: "100%", paddingBottom: "1rem" }}
             />
             <Card.Title style={{ color: "#f8f9fa" }}>Synshorn 1475</Card.Title>
             <Card.Body style={{ color: "#f8f9fa" }}>
@@ -43,12 +48,17 @@ function App() {
             </Card.Body>
           </Card>
           <Card
-            style={{ padding: "1rem", margin: "1rem", width: "27rem" }}
+            style={{
+              padding: "1rem",
+              margin: "1rem 0",
+              width: "27rem",
+              maxWidth: "100%",
+            }}
             bg="dark"
           >
             <Card.Img
               src={mugnetind_img}
-              style={{ width: "25rem", paddingBottom: "1rem" }}
+              style={{ width: "100%", paddingBottom: "1rem" }}
             />
             <Card.Title style={{ color: "#f8f9fa" }}>Mugnetind 1740</Card.Title>
             <Card.Body style={{ color: "#f8f9fa" }}>
