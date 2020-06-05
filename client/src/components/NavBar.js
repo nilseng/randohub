@@ -27,6 +27,11 @@ const NavBar = () => {
           Randohub
         </span>
       </Navbar.Brand>
+      <Navbar.Toggle
+        className="mb-2"
+        aria-controls="basic-navbar-nav"
+        style={{ outline: "none" }}
+      />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
         <Nav>
           <Nav.Link href="/summits">Summits</Nav.Link>
