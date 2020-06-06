@@ -52,7 +52,7 @@ app.listen({ port: process.env.PORT || 4000 }, () =>
   console.log(`The server is now running on port ${process.env.PORT || 4000}`)
 );
 
-server.express.use(
+app.use(
   "/*",
   express.static(path.join(__dirname, "../../client/build", "index.html"))
 );
