@@ -1,28 +1,24 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
+import { useQuery } from "react-apollo";
+import gql from "graphql-tag";
 
-const mockSummits = [
+const GET_SUMMITS = gql`
   {
-    name: "Rasletind",
-    height: 2105,
-    rating: 10,
-  },
-  {
-    name: "Mugnetind",
-    height: 1750,
-    rating: 5,
-  },
-  {
-    name: "Mount Everest",
-    height: 8848,
-    rating: 6,
-  },
-];
+    summits {
+      _id
+      name
+      height
+    }
+  }
+`;
 
 const Summits = () => {
-  const summits = mockSummits;
-  summits.forEach((summit) => console.log(summit));
+  const { loading, error, data } = useQuery(GET_SUMMITS);
+
+  if (error) console.log(error);
+
   return (
     <div
       style={{
@@ -32,9 +28,11 @@ const Summits = () => {
       }}
     >
       <Container style={{ padding: "1rem 0" }}>
-        {summits &&
-          summits.map((summit) => (
+        {loading && <div>loading...</div>}
+        {data &&
+          data.summits.map((summit) => (
             <Card
+              key={summit._id}
               style={{
                 padding: "1rem",
                 margin: "1rem 0",
@@ -47,7 +45,6 @@ const Summits = () => {
               <Card.Title>{summit.name}</Card.Title>
               <Card.Body>
                 <div>Height: {summit.height}</div>
-                <div>Rating: {summit.rating}</div>
               </Card.Body>
             </Card>
           ))}

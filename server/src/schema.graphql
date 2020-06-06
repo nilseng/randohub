@@ -1,0 +1,26 @@
+type Query {
+  summits: [Summit]!
+  ascents: [Ascent]!
+}
+
+type Mutation {
+  createSummit(name: String!, height: Int!): Summit
+}
+
+type Summit {
+  _id: ID!
+  name: String!
+  height: Int!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Ascent {
+  name: String!
+  description: String
+  summits: [Summit]!
+}
+
+type Bucketlist {
+  summits: [Summit]!
+}

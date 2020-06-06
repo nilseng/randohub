@@ -1,9 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createHttpLink } from "apollo-link-http";
+import { setContext } from "apollo-link-context";
+import { getIdTokenClaims } from "./react-auth0-spa";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
 import "./index.css";
 import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Auth0Provider } from "./react-auth0-spa";
 import config from "./auth_config.json";
 import history from "./utils/history";
@@ -18,6 +25,25 @@ const onRedirectCallback = (appState) => {
   );
 };
 
+const httpLink = createHttpLink({ credentials: "include" });
+
+const authLink = setContext(async (_, { headers }) => {
+  // get the authentication token from auth0
+  const token = await getIdTokenClaims();
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token.__raw}` : "",
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
   <Auth0Provider
     domain={process.env.REACT_APP_AUTH0_DOMAIN || config.domain}
@@ -25,7 +51,9 @@ ReactDOM.render(
     redirect_uri={window.location.origin}
     onRedirectCallback={onRedirectCallback}
   >
-    <App />
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   </Auth0Provider>,
   document.getElementById("root")
 );

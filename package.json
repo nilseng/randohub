@@ -1,8 +1,6 @@
 {
   "scripts": {
-    "heroku-prebuild": "cd client && npm i && npm run build"
-  },
-  "dependencies": {
-    "serve": "^11.3.2"
+    "heroku-prebuild": "cd client && npm i && npm run build",
+    "heroku-postbuild": "cd server && npm i"
   }
 }

@@ -1,12 +1,43 @@
 // src/react-auth0-spa.js
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
+import config from "./auth_config.json";
 
 const DEFAULT_REDIRECT_CALLBACK = () =>
   window.history.replaceState({}, document.title, window.location.pathname);
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
+
+let _initOptions = {
+  domain: process.env.REACT_APP_AUTH0_DOMAIN || config.domain,
+  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID || config.clientId,
+};
+
+const getAuth0Client = () => {
+  return new Promise(async (resolve, reject) => {
+    let client;
+    if (!client) {
+      try {
+        client = await createAuth0Client(_initOptions);
+        resolve(client);
+      } catch (e) {
+        reject(new Error("getAuth0Client Error", e));
+      }
+    }
+  });
+};
+
+export const getTokenSilently = async (...p) => {
+  const client = await getAuth0Client();
+  return await client.getTokenSilently(...p);
+};
+
+export const getIdTokenClaims = async (...p) => {
+  const client = await getAuth0Client();
+  return await client.getIdTokenClaims(...p);
+};
+
 export const Auth0Provider = ({
   children,
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,

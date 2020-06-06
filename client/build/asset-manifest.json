@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2ec3d6c2.chunk.css",
+    "main.js": "/static/js/main.156f5c15.chunk.js",
+    "main.js.map": "/static/js/main.156f5c15.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.96df500e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.96df500e.js.map",
+    "static/css/2.af3c1da9.chunk.css": "/static/css/2.af3c1da9.chunk.css",
+    "static/js/2.5214ac10.chunk.js": "/static/js/2.5214ac10.chunk.js",
+    "static/js/2.5214ac10.chunk.js.map": "/static/js/2.5214ac10.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.c6550167191005af2f0349bc326565a5.js": "/precache-manifest.c6550167191005af2f0349bc326565a5.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.af3c1da9.chunk.css.map": "/static/css/2.af3c1da9.chunk.css.map",
+    "static/css/main.2ec3d6c2.chunk.css.map": "/static/css/main.2ec3d6c2.chunk.css.map",
+    "static/js/2.5214ac10.chunk.js.LICENSE.txt": "/static/js/2.5214ac10.chunk.js.LICENSE.txt",
+    "static/media/mugnetind.jpg": "/static/media/mugnetind.7816eba8.jpg",
+    "static/media/rasletind.jpg": "/static/media/rasletind.add6f425.jpg",
+    "static/media/synshorn.jpg": "/static/media/synshorn.c1c458c8.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.96df500e.js",
+    "static/css/2.af3c1da9.chunk.css",
+    "static/js/2.5214ac10.chunk.js",
+    "static/css/main.2ec3d6c2.chunk.css",
+    "static/js/main.156f5c15.chunk.js"
+  ]
+}

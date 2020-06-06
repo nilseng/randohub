@@ -7,10 +7,12 @@ import { faMountain } from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth0 } from "../react-auth0-spa";
 
+import "../styles/NavBar.scss";
+
 const NavBar = () => {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   return (
-    <Navbar bg="dark" expand="md" collapseOnSelect>
+    <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
       <Navbar.Brand style={{ color: "#f8f9fa" }} href="/">
         <span
           style={{
@@ -48,6 +50,9 @@ const NavBar = () => {
           )}
           {isAuthenticated && (
             <>
+              <Nav.Item>
+                <Nav.Link href="/bucketlist">Bucket List</Nav.Link>
+              </Nav.Item>
               <Nav.Item>
                 <Nav.Link href="/profile">Profile</Nav.Link>
               </Nav.Item>
