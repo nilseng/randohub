@@ -12,6 +12,8 @@ const typeDefs = fs.readFileSync(
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, "../../client/build")));
+
 app.use((req, res, next) => {
   if (
     !req.secure &&
@@ -21,8 +23,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-app.use(express.static(path.join(__dirname, "../../client/build")));
 
 const resolvers = {
   Query: {
