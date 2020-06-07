@@ -3,7 +3,13 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faMountain } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMountain,
+  faList,
+  faSkiingNordic,
+  faBan,
+  faKey,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth0 } from "../react-auth0-spa";
 
@@ -36,7 +42,13 @@ const NavBar = () => {
       />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
         <Nav>
-          <Nav.Link href="/summits">Summits</Nav.Link>
+          <Nav.Link href="/summits">
+            <FaIcon
+              icon={faMountain}
+              style={{ marginRight: "0.4rem" }}
+            ></FaIcon>
+            Summits
+          </Nav.Link>
           {!isAuthenticated && (
             <Nav.Item>
               <Button
@@ -44,6 +56,7 @@ const NavBar = () => {
                 className="mr-2"
                 onClick={() => loginWithRedirect({})}
               >
+                <FaIcon icon={faKey} style={{ marginRight: "0.4rem" }}></FaIcon>
                 Log In
               </Button>
             </Nav.Item>
@@ -51,12 +64,25 @@ const NavBar = () => {
           {isAuthenticated && (
             <>
               <Nav.Item>
-                <Nav.Link href="/bucketlist">Bucket List</Nav.Link>
+                <Nav.Link href="/bucketlist">
+                  <FaIcon
+                    icon={faList}
+                    style={{ marginRight: "0.4rem" }}
+                  ></FaIcon>
+                  Bucket List
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="/profile">Profile</Nav.Link>
+                <Nav.Link href="/profile">
+                  <FaIcon
+                    icon={faSkiingNordic}
+                    style={{ marginRight: "0.4rem" }}
+                  ></FaIcon>
+                  Profile
+                </Nav.Link>
               </Nav.Item>
               <Nav.Link className="mr-2" onClick={() => logout()}>
+                <FaIcon icon={faBan} style={{ marginRight: "0.4rem" }}></FaIcon>
                 Log out
               </Nav.Link>
             </>
