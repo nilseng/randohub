@@ -14,16 +14,6 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../../client/build")));
 
-app.use((req, res, next) => {
-  if (
-    !req.secure &&
-    !req.headers.host === `localhost:${process.env.PORT || 4000}`
-  ) {
-    return res.redirect("https://" + req.headers.host + req.path);
-  }
-  next();
-});
-
 const resolvers = {
   Query: {
     summits: async () => {
@@ -73,3 +63,13 @@ app.use(
   "/*",
   express.static(path.join(__dirname, "../../client/build", "index.html"))
 );
+
+app.use((req, res, next) => {
+  if (
+    !req.secure &&
+    !req.headers.host === `localhost:${process.env.PORT || 4000}`
+  ) {
+    return res.redirect("https://" + req.headers.host + req.path);
+  }
+  next();
+});
