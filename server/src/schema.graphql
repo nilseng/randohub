@@ -5,6 +5,7 @@ type Query {
 
 type Mutation {
   createSummit(name: String!, height: Int!): Summit
+  deleteSummit(_id: ID!): ID
 }
 
 type Summit {

@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const apollo = require("apollo-server-express");
 const fs = require("fs");
+const db = require("mongodb");
 
 const connectToMongoDb = require("./database/databaseSetup");
 const typeDefs = fs.readFileSync(
@@ -26,13 +27,18 @@ const resolvers = {
   },
   Mutation: {
     createSummit: async (parent, args) => {
-      console.log(args);
       const summit = args;
       const now = Date.now();
       summit.createdAt = now;
       summit.updatedAt = now;
       const res = await summitCollection.insertOne(summit);
       return res.ops[0];
+    },
+    deleteSummit: async (parent, args) => {
+      const deleted = await summitCollection.deleteOne({
+        _id: new db.ObjectID(args._id),
+      });
+      return deleted.deletedCount ? args._id : null;
     },
   },
 };
