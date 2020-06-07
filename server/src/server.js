@@ -26,6 +26,7 @@ const resolvers = {
   },
   Mutation: {
     createSummit: async (parent, args) => {
+      console.log(args);
       const summit = args;
       const now = Date.now();
       summit.createdAt = now;

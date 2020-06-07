@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
-import { useQuery } from "react-apollo";
+import { useQuery, useMutation } from "react-apollo";
 import gql from "graphql-tag";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
@@ -19,15 +19,33 @@ const GET_SUMMITS = gql`
   }
 `;
 
+const CREATE_SUMMIT = gql`
+  mutation CreateSummit($name: String!, $height: Int!) {
+    createSummit(name: $name, height: $height) {
+      _id
+      name
+      height
+      createdAt
+    }
+  }
+`;
+
 const Summits = () => {
-  const [newSummit, setNewSummit] = useState({
-    name: "placeholder summit",
-    height: -10,
-  });
+  const [showModal, setShowModal] = useState(false);
 
   const { loading, error, data } = useQuery(GET_SUMMITS);
 
   if (error) console.log(error);
+
+  const [createSummit] = useMutation(CREATE_SUMMIT, {
+    update(cache, { data: { createSummit } }) {
+      const { summits } = cache.readQuery({ query: GET_SUMMITS });
+      cache.writeQuery({
+        query: GET_SUMMITS,
+        data: { summits: [...summits, createSummit] },
+      });
+    },
+  });
 
   return (
     <div
@@ -38,18 +56,15 @@ const Summits = () => {
       }}
     >
       <Container style={{ padding: "1rem 0" }}>
-        <Button
-          onClick={() =>
-            setNewSummit({
-              name: "placeholder summit",
-              height: 10,
-            })
-          }
-        >
+        <Button onClick={() => setShowModal(true)}>
           <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Add
           Summit
         </Button>
-        <SummitModal newSummit={newSummit} setNewSummit={setNewSummit} />
+        <SummitModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          createSummit={createSummit}
+        />
         {loading && <div>loading...</div>}
         {data &&
           data.summits.map((summit) => (
