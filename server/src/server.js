@@ -3,6 +3,7 @@ const path = require("path");
 const apollo = require("apollo-server-express");
 const fs = require("fs");
 const db = require("mongodb");
+require("dotenv").config();
 
 const connectToMongoDb = require("./database/databaseSetup");
 const typeDefs = fs.readFileSync(
@@ -59,6 +60,12 @@ const resolvers = {
     deleteTrips: async () => {
       const deleted = await tripCollection.deleteMany();
       return deleted.deletedCount;
+    },
+    deleteTrip: async (parent, args) => {
+      const deleted = await tripCollection.deleteOne({
+        _id: new db.ObjectID(args._id),
+      });
+      return deleted.deletedCount ? args._id : null;
     },
   },
 };

@@ -9,6 +9,7 @@ type Mutation {
   deleteSummit(_id: ID!): ID
   deleteSummits: Int
   createTrip(name: String!, description: String): Trip
+  deleteTrip(_id: ID!): ID
   deleteTrips: Int
 }
 

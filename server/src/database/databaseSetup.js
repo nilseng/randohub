@@ -1,10 +1,7 @@
 const db = require("mongodb");
 
 const connectToMongoDb = async () => {
-  const db_uri =
-    process.env.MONGODB_URI_RANDOHUB ||
-    process.env.DB_URI ||
-    process.env.MONGODB_URI;
+  const db_uri = process.env.DB_URI || process.env.MONGODB_URI;
   if (!db_uri) {
     throw Error("MongoDB URI not found");
   }
