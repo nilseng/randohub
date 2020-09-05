@@ -5,18 +5,18 @@ import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-const TripModal = ({ showModal, setShowModal }) => {
+const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const [tripName, setTripName] = useState("");
 
   const onSave = () => {
-    /*     createTrip({
+    createTrip({
       variables: { name: tripName },
-    }); */
+    });
     handleClose();
   };
 
   const handleClose = () => {
-    setTripName(undefined);
+    setTripName("");
     setShowModal(false);
   };
 
