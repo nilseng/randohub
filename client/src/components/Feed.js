@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
+import TripModal from "./TripModal";
+
 import synshorn_img from "../images/synshorn.jpg";
 import mugnetind_img from "../images/mugnetind.jpg";
 import rasletind_img from "../images/rasletind.jpg";
@@ -24,6 +26,7 @@ const Feed = () => {
           <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Legg
           til tur
         </Button>
+        <TripModal showModal={showModal} setShowModal={setShowModal} />
         <Card
           style={{
             padding: "1rem",

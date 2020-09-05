@@ -16,10 +16,22 @@ type Summit {
   updatedAt: String!
 }
 
-type Ascent {
+type Trip {
   name: String!
   description: String
   summits: [Summit]!
+  startedAt: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Ascent {
+  name: String!
+  description: String
+  summits: Summit!
+  startedAt: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Bucketlist {
