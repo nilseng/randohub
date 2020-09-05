@@ -4,6 +4,8 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import gql from "graphql-tag";
+import { useQuery } from "react-apollo";
 
 import TripModal from "./TripModal";
 
@@ -11,8 +13,21 @@ import synshorn_img from "../images/synshorn.jpg";
 import mugnetind_img from "../images/mugnetind.jpg";
 import rasletind_img from "../images/rasletind.jpg";
 
+const GET_TRIPS = gql`
+  {
+    trips {
+      _id
+      name
+      description
+    }
+  }
+`;
+
 const Feed = () => {
   const [showModal, setShowModal] = useState(false);
+
+  const { loading, error, data } = useQuery(GET_TRIPS);
+
   return (
     <div
       style={{
@@ -27,6 +42,23 @@ const Feed = () => {
           til tur
         </Button>
         <TripModal showModal={showModal} setShowModal={setShowModal} />
+        {loading && <div>loading...</div>}
+        {data &&
+          data.trips.map((trip) => (
+            <Card
+              key={trip._id}
+              style={{
+                padding: "1rem",
+                margin: "1rem 0",
+                width: "27rem",
+                maxWidth: "100%",
+                color: "#f8f9fa",
+              }}
+              bg="dark"
+            >
+              <Card.Title>{trip.name}</Card.Title>
+            </Card>
+          ))}
         <Card
           style={{
             padding: "1rem",

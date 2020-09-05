@@ -15,6 +15,7 @@ const connectToMongoDb = async () => {
   );
 
   const summits = client.db().collection("summits");
+  const trips = client.db().collection("trips");
   const ascents = client.db().collection("ascents");
   const bucketlist = client.db().collection("bucketlist");
 
@@ -51,7 +52,7 @@ const connectToMongoDb = async () => {
     });
   });
 
-  return [summits, ascents, bucketlist];
+  return [summits, trips, ascents, bucketlist];
 };
 
 module.exports = connectToMongoDb;

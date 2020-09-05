@@ -20,6 +20,10 @@ const resolvers = {
       const summits = await summitCollection.find({}).toArray();
       return summits;
     },
+    trips: async () => {
+      const trips = await tripCollection.find({}).toArray();
+      return trips;
+    },
     ascents: async () => {
       const ascents = await ascentCollection.find({}).toArray();
       return ascents;
@@ -40,6 +44,22 @@ const resolvers = {
       });
       return deleted.deletedCount ? args._id : null;
     },
+    deleteSummits: async () => {
+      const deleted = await summitCollection.deleteMany();
+      return deleted.deletedCount;
+    },
+    createTrip: async (parent, args) => {
+      const trip = args;
+      const now = Date.now();
+      trip.createdAt = now;
+      trip.updatedAt = now;
+      const res = await tripCollection.insertOne(trip);
+      return res.ops[0];
+    },
+    deleteTrips: async () => {
+      const deleted = await tripCollection.deleteMany();
+      return deleted.deletedCount;
+    },
   },
 };
 
@@ -50,9 +70,14 @@ const server = new apollo.ApolloServer({
 
 server.applyMiddleware({ app });
 
-let summitCollection, ascentCollection, bucketlistCollection;
+let summitCollection, tripCollection, ascentCollection, bucketlistCollection;
 connectToMongoDb().then((res) => {
-  [summitCollection, ascentCollection, bucketlistCollection] = res;
+  [
+    summitCollection,
+    tripCollection,
+    ascentCollection,
+    bucketlistCollection,
+  ] = res;
 });
 
 app.listen({ port: process.env.PORT || 4000 }, () =>
