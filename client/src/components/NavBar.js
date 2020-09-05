@@ -47,7 +47,7 @@ const NavBar = () => {
               icon={faMountain}
               style={{ marginRight: "0.4rem" }}
             ></FaIcon>
-            Summits
+            Topper
           </Nav.Link>
           {!isAuthenticated && (
             <Nav.Item>
@@ -57,7 +57,7 @@ const NavBar = () => {
                 onClick={() => loginWithRedirect({})}
               >
                 <FaIcon icon={faKey} style={{ marginRight: "0.4rem" }}></FaIcon>
-                Log In
+                Logg inn
               </Button>
             </Nav.Item>
           )}
@@ -69,7 +69,7 @@ const NavBar = () => {
                     icon={faList}
                     style={{ marginRight: "0.4rem" }}
                   ></FaIcon>
-                  Bucket List
+                  Ønskelista
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
@@ -78,12 +78,12 @@ const NavBar = () => {
                     icon={faSkiingNordic}
                     style={{ marginRight: "0.4rem" }}
                   ></FaIcon>
-                  Profile
+                  Profil
                 </Nav.Link>
               </Nav.Item>
               <Nav.Link className="mr-2" onClick={() => logout()}>
                 <FaIcon icon={faBan} style={{ marginRight: "0.4rem" }}></FaIcon>
-                Log out
+                Logg ut
               </Nav.Link>
             </>
           )}

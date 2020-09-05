@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import synshorn_img from "../images/synshorn.jpg";
 import mugnetind_img from "../images/mugnetind.jpg";
 import rasletind_img from "../images/rasletind.jpg";
 
 const Feed = () => {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div
       style={{
@@ -16,6 +20,10 @@ const Feed = () => {
       }}
     >
       <Container style={{ padding: "1rem 0" }}>
+        <Button onClick={() => setShowModal(true)}>
+          <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Legg
+          til tur
+        </Button>
         <Card
           style={{
             padding: "1rem",
