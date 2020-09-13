@@ -1,7 +1,6 @@
 // src/react-auth0-spa.js
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
-import config from "./auth_config.json";
 
 const DEFAULT_REDIRECT_CALLBACK = () =>
   window.history.replaceState({}, document.title, window.location.pathname);
@@ -10,8 +9,8 @@ export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 
 let _initOptions = {
-  domain: process.env.REACT_APP_AUTH0_DOMAIN || config.domain,
-  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID || config.clientId,
+  domain: process.env.REACT_APP_AUTH0_DOMAIN,
+  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
 };
 
 const getAuth0Client = () => {

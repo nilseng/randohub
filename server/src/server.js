@@ -5,6 +5,7 @@ const fs = require("fs");
 const db = require("mongodb");
 require("dotenv").config();
 
+const isTokenValid = require("./auth/validate");
 const connectToMongoDb = require("./database/databaseSetup");
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "./schema.graphql"),
@@ -71,8 +72,12 @@ const resolvers = {
 };
 
 const server = new apollo.ApolloServer({
-  typeDefs: typeDefs,
+  typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const token = req.headers.authorization || "";
+    const user = await isTokenValid(token);
+  },
 });
 
 server.applyMiddleware({ app });
