@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -32,6 +32,12 @@ const CREATE_TRIP = gql`
 `;
 
 const Feed = () => {
+  const [image, setImage] = useState();
+
+  useEffect(() => {
+    fetch("/s3/object?key=rasletind.jpg").then((res) => setImage(res));
+  }, [image]);
+
   const [showModal, setShowModal] = useState(false);
 
   const { loading, error, data } = useQuery(GET_TRIPS);
@@ -80,6 +86,10 @@ const Feed = () => {
               }}
               bg="dark"
             >
+              <Card.Img
+                src={rasletind_img}
+                style={{ width: "100%", paddingBottom: "1rem" }}
+              />
               <Card.Title>{trip.name}</Card.Title>
             </Card>
           ))}

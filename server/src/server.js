@@ -1,18 +1,34 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const path = require("path");
 const apollo = require("apollo-server-express");
 const fs = require("fs");
 const db = require("mongodb");
+const morgan = require("morgan");
+
 require("dotenv").config();
 
 const isTokenValid = require("./auth/validate");
 const connectToMongoDb = require("./database/databaseSetup");
+const s3 = require("./s3/s3");
 const typeDefs = fs.readFileSync(
   path.join(__dirname, "./schema.graphql"),
   "utf8"
 );
 
 const app = express();
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
+
+app.use(bodyParser.json());
+
+app.use(morgan("combined"));
+
+app.use("/s3", s3);
 
 app.use(express.static(path.join(__dirname, "../../client/build")));
 

@@ -13,11 +13,13 @@
   "dependencies": {
     "apollo-server": "^2.14.2",
     "apollo-server-express": "^2.14.2",
+    "aws-sdk": "^2.751.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.9.0",
-    "mongodb": "^3.5.8"
+    "mongodb": "^3.5.8",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
