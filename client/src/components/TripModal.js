@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
+import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,7 +27,8 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   };
 
   const handleImageChange = (files) => {
-    setFiles(files);
+    setFiles(Array.from(files));
+    console.log(files);
   };
 
   return showModal ? (
@@ -45,16 +47,25 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
       </Modal.Header>
       <Modal.Body>
         {files?.length > 0 && (
-          <>
-            <Image
-              className="preview-image"
-              src={URL.createObjectURL(files[files.length - 1])}
-              rounded
-            />
-            <p>{files.length} bilde(r) er valgt.</p>
-          </>
+          <Carousel>
+            {files.map((file) => (
+              <Carousel.Item
+                key={file.name}
+                className="preview-image-container"
+              >
+                <Image
+                  className="preview-image"
+                  src={URL.createObjectURL(file)}
+                  rounded
+                />
+                <Carousel.Caption>
+                  <p>{files.length} bilde(r) er valgt.</p>
+                </Carousel.Caption>
+              </Carousel.Item>
+            ))}
+          </Carousel>
         )}
-        <Form.Group>
+        <Form.Group className="mt-2">
           <Form.File custom>
             <Form.File.Input
               multiple
