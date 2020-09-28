@@ -40,7 +40,7 @@ router.get("/object/:key", (req, res) => {
   };
   s3.getObject(params, (err, data) => {
     if (err) res.status(400).json(err);
-    else res.status(200).send(data);
+    else res.status(200).send(data.Body);
   });
 });
 

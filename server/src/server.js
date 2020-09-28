@@ -26,7 +26,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.use(morgan("combined"));
+app.use(morgan("tiny"));
 
 app.use("/s3", s3);
 
@@ -73,6 +73,19 @@ const resolvers = {
       trip.updatedAt = now;
       const res = await tripCollection.insertOne(trip);
       return res.ops[0];
+    },
+    updateTrip: async (parent, args) => {
+      const trip = args;
+      trip.updatedAt = Date.now();
+      const { _id, ...props } = trip;
+      const res = await tripCollection.findOneAndUpdate(
+        {
+          _id: new db.ObjectID(_id),
+        },
+        { $set: props },
+        { returnOriginal: false }
+      );
+      return res.value ? res.value : null;
     },
     deleteTrips: async () => {
       const deleted = await tripCollection.deleteMany();

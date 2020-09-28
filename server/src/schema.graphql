@@ -8,9 +8,25 @@ type Mutation {
   createSummit(name: String!, height: Int!): Summit
   deleteSummit(_id: ID!): ID
   deleteSummits: Int
-  createTrip(name: String!, description: String): Trip
+  createTrip(name: String, description: String): Trip
+  updateTrip(
+    _id: ID!
+    name: String
+    description: String
+    summitIds: [ID]
+    imageIds: [ID]
+    startedAt: String
+  ): Trip
   deleteTrip(_id: ID!): ID
   deleteTrips: Int
+}
+
+type Image {
+  _id: ID!
+  trip: Trip!
+  summits: [Summit]
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Summit {
@@ -23,12 +39,13 @@ type Summit {
 
 type Trip {
   _id: ID!
-  name: String!
+  name: String
   description: String
-  summits: [Summit]!
-  startedAt: String!
-  createdAt: String!
-  updatedAt: String!
+  summits: [Summit]
+  images: [Image]
+  startedAt: String
+  createdAt: String
+  updatedAt: String
 }
 
 type Ascent {

@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Image from "react-bootstrap/Image";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
+import "../styles/TripModal.scss";
+
 const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const [tripName, setTripName] = useState("");
+  const [files, setFiles] = useState();
 
   const onSave = () => {
     createTrip({
@@ -18,6 +22,11 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const handleClose = () => {
     setTripName("");
     setShowModal(false);
+    setFiles();
+  };
+
+  const handleImageChange = (files) => {
+    setFiles(files);
   };
 
   return showModal ? (
@@ -35,8 +44,27 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {files?.length > 0 && (
+          <>
+            <Image
+              className="preview-image"
+              src={URL.createObjectURL(files[files.length - 1])}
+              rounded
+            />
+            <p>{files.length} bilde(r) er valgt.</p>
+          </>
+        )}
         <Form.Group>
-          <Form.Label>Tur-placeholder</Form.Label>
+          <Form.File custom>
+            <Form.File.Input
+              multiple
+              accept="image/*"
+              onChange={(e) => handleImageChange(e.target.files)}
+            />
+            <Form.File.Label data-browse="Velg bilder">
+              Last opp bilder fra turen!
+            </Form.File.Label>
+          </Form.File>
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>

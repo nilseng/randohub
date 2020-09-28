@@ -35,8 +35,12 @@ const Feed = () => {
   const [image, setImage] = useState();
 
   useEffect(() => {
-    fetch("/s3/object?key=rasletind.jpg").then((res) => setImage(res));
-  }, [image]);
+    fetch("/s3/object/rasletind.jpg").then(async (res) => {
+      const imageBlob = await res.blob();
+      const imageUrl = URL.createObjectURL(imageBlob);
+      setImage(imageUrl);
+    });
+  }, []);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -87,7 +91,7 @@ const Feed = () => {
               bg="dark"
             >
               <Card.Img
-                src={rasletind_img}
+                src={image}
                 style={{ width: "100%", paddingBottom: "1rem" }}
               />
               <Card.Title>{trip.name}</Card.Title>
