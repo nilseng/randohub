@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faImages } from "@fortawesome/free-solid-svg-icons";
 
 import "../styles/TripModal.scss";
 
@@ -34,7 +34,7 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   return showModal ? (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header>
-        <Modal.Title>
+        <Modal.Title className="w-100">
           <Form.Group>
             <Form.Label>Navn på turen</Form.Label>
             <Form.Control
@@ -64,6 +64,12 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
               </Carousel.Item>
             ))}
           </Carousel>
+        )}
+        {(!files || files?.length === 0) && (
+          <div className="preview-image-placeholder bg-light">
+            <FaIcon icon={faImages} size="10x" className="text-muted"></FaIcon>
+            <p className="text-muted">Ingen bilder valgt</p>
+          </div>
         )}
         <Form.Group className="mt-2">
           <Form.File custom>
