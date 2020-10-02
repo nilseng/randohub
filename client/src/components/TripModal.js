@@ -14,9 +14,7 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const [files, setFiles] = useState();
 
   const onSave = () => {
-    createTrip({
-      variables: { name: tripName },
-    });
+    createTrip();
     handleClose();
   };
 
@@ -28,11 +26,10 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
 
   const handleImageChange = (files) => {
     setFiles(Array.from(files));
-    console.log(files);
   };
 
   return showModal ? (
-    <Modal show={showModal} onHide={handleClose}>
+    <Modal show={showModal} onHide={handleClose} onShow={createTrip}>
       <Modal.Header>
         <Modal.Title className="w-100">
           <Form.Group>
