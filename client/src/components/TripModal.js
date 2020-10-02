@@ -14,8 +14,11 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const [tripName, setTripName] = useState("");
   const [files, setFiles] = useState();
 
+  const handleShow = () => {
+    createTrip({ variables: { name: tripName } });
+  };
+
   const onSave = () => {
-    createTrip();
     handleClose();
   };
 
@@ -30,7 +33,7 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
   };
 
   return showModal ? (
-    <Modal show={showModal} onHide={handleClose} onShow={createTrip}>
+    <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
       <Modal.Header>
         <Modal.Title className="w-100">
           <Form.Group>

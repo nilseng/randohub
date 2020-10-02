@@ -19,9 +19,10 @@ const GET_TRIPS = gql`
 `;
 
 const CREATE_TRIP = gql`
-  mutation CreateTrip {
-    createTrip {
+  mutation CreateTrip($name: String) {
+    createTrip(name: $name) {
       _id
+      name
     }
   }
 `;
