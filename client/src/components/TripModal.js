@@ -5,9 +5,10 @@ import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faImages } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import "../styles/TripModal.scss";
+import ImagePlaceholder from "./ImagePlaceholder";
 
 const TripModal = ({ showModal, setShowModal, createTrip }) => {
   const [tripName, setTripName] = useState("");
@@ -43,31 +44,27 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {files?.length > 0 && (
-          <Carousel>
-            {files.map((file) => (
-              <Carousel.Item
-                key={file.name}
-                className="preview-image-container"
-              >
-                <Image
-                  className="preview-image"
-                  src={URL.createObjectURL(file)}
-                  rounded
-                />
-                <Carousel.Caption>
-                  <p>{files.length} bilde(r) er valgt.</p>
-                </Carousel.Caption>
-              </Carousel.Item>
-            ))}
-          </Carousel>
-        )}
-        {(!files || files?.length === 0) && (
-          <div className="preview-image-placeholder bg-light">
-            <FaIcon icon={faImages} size="10x" className="text-muted"></FaIcon>
-            <p className="text-muted">Ingen bilder valgt</p>
-          </div>
-        )}
+        <div className="image-container">
+          {files?.length > 0 && (
+            <Carousel className="h-100">
+              {files.map((file) => (
+                <Carousel.Item key={file.name}>
+                  <Image
+                    className="preview-image"
+                    src={URL.createObjectURL(file)}
+                    rounded
+                  />
+                  <Carousel.Caption>
+                    <p>{files.length} bilde(r) er valgt.</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              ))}
+            </Carousel>
+          )}
+          {(!files || files?.length === 0) && (
+            <ImagePlaceholder text={"Ingen bilder er valgt."} />
+          )}
+        </div>
         <Form.Group className="mt-2">
           <Form.File custom>
             <Form.File.Input

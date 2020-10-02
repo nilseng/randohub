@@ -1,19 +1,15 @@
 .preview-image {
   max-width: 100%;
+  // Setting margin-top to half of image-container height to center the top of the image
   margin-top: 10rem;
   transform: translateY(-50%);
   overflow: hidden;
 }
 
-.preview-image-container {
+.image-container {
   height: 20rem;
-}
 
-.preview-image-placeholder {
-  height: 20rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  .carousel-inner {
+    max-height: 100%;
+  }
 }

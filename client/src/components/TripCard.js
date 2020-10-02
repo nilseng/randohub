@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 
 import "../styles/Card.scss";
+import ImagePlaceholder from "./ImagePlaceholder";
 
 const TripCard = ({ trip }) => {
   const [image, setImage] = useState();
@@ -15,7 +16,13 @@ const TripCard = ({ trip }) => {
   }, []);
   return (
     <Card className="card" bg="dark">
-      <Card.Img src={image} className="pb-2" />
+      <div className="image-container">
+        {image ? (
+          <Card.Img src={image} className="image pb-2" />
+        ) : (
+          <ImagePlaceholder />
+        )}
+      </div>
       {trip.name && <Card.Title>{trip.name}</Card.Title>}
     </Card>
   );
