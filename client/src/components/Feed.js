@@ -14,15 +14,42 @@ const GET_TRIPS = gql`
     trips {
       _id
       name
+      description
+      createdAt
     }
   }
 `;
 
 const CREATE_TRIP = gql`
-  mutation CreateTrip($name: String) {
-    createTrip(name: $name) {
+  mutation CreateTrip {
+    createTrip {
       _id
       name
+      description
+      createdAt
+    }
+  }
+`;
+
+const UPDATE_TRIP = gql`
+  mutation UpdateTrip(
+    $_id: ID!
+    $name: String
+    $description: String
+    $summitIds: [ID]
+    $imageIds: [ID]
+  ) {
+    updateTrip(
+      _id: $_id
+      name: $name
+      description: $description
+      summitIds: $summitIds
+      imageIds: $imageIds
+    ) {
+      _id
+      name
+      description
+      createdAt
     }
   }
 `;
@@ -34,13 +61,24 @@ const Feed = () => {
 
   if (error) console.log(error);
 
+  // TODO: Update cache only onSave?
   const [createTrip] = useMutation(CREATE_TRIP, {
     update(cache, { data: { createTrip } }) {
       const { trips } = cache.readQuery({ query: GET_TRIPS });
       cache.writeQuery({
         query: GET_TRIPS,
-        data: { trips: [...trips, createTrip] },
+        data: { trips: [createTrip, ...trips] },
       });
+    },
+  });
+
+  const [updateTrip] = useMutation(UPDATE_TRIP, {
+    update(cache, { data: { updateTrip } }) {
+      const { trips } = cache.readQuery({ query: GET_TRIPS });
+      trips
+        .filter((trip) => trip._id === updateTrip._id)
+        .map((trip) => (trip = updateTrip));
+      cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
     },
   });
 
@@ -53,6 +91,7 @@ const Feed = () => {
         showModal={showModal}
         setShowModal={setShowModal}
         createTrip={createTrip}
+        updateTrip={updateTrip}
       />
       {loading && <div>loading...</div>}
       {data &&

@@ -8,14 +8,13 @@ type Mutation {
   createSummit(name: String!, height: Int!): Summit
   deleteSummit(_id: ID!): ID
   deleteSummits: Int
-  createTrip(name: String): Trip
+  createTrip: Trip
   updateTrip(
     _id: ID!
     name: String
     description: String
     summitIds: [ID]
     imageIds: [ID]
-    startedAt: String
   ): Trip
   deleteTrip(_id: ID!): ID
   deleteTrips: Int

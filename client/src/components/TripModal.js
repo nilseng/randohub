@@ -10,20 +10,30 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "../styles/TripModal.scss";
 import ImagePlaceholder from "./ImagePlaceholder";
 
-const TripModal = ({ showModal, setShowModal, createTrip }) => {
-  const [tripName, setTripName] = useState("");
+const defaultTrip = {
+  _id: null,
+  name: "Topptur",
+  description: null,
+  summitIds: null,
+  imageIds: null,
+};
+
+const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
+  const [trip, setTrip] = useState(defaultTrip);
   const [files, setFiles] = useState();
 
-  const handleShow = () => {
-    createTrip({ variables: { name: tripName } });
+  const handleShow = async () => {
+    const tripWithId = await createTrip();
+    setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
   };
 
-  const onSave = () => {
+  const onSave = async () => {
+    await updateTrip({ variables: trip });
     handleClose();
   };
 
   const handleClose = () => {
-    setTripName("");
+    setTrip(defaultTrip);
     setShowModal(false);
     setFiles();
   };
@@ -40,8 +50,8 @@ const TripModal = ({ showModal, setShowModal, createTrip }) => {
             <Form.Label>Navn på turen</Form.Label>
             <Form.Control
               placeholder='F.eks. "Fin tur på Rasletind!"'
-              value={tripName}
-              onChange={(e) => setTripName(e.target.value)}
+              value={trip.name}
+              onChange={(e) => setTrip({ ...trip, name: e.target.value })}
             ></Form.Control>
           </Form.Group>
         </Modal.Title>

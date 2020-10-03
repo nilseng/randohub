@@ -7,6 +7,16 @@ import ImagePlaceholder from "./ImagePlaceholder";
 const TripCard = ({ trip }) => {
   const [image, setImage] = useState();
 
+  const [date] = useState(
+    new Date(+trip?.createdAt).toLocaleString(undefined, {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    })
+  );
+
   useEffect(() => {
     fetch("/s3/object/rasletind.jpg").then(async (res) => {
       const imageBlob = await res.blob();
@@ -16,6 +26,7 @@ const TripCard = ({ trip }) => {
   }, []);
   return (
     <Card className="card" bg="dark">
+      <p>{date}</p>
       <div className="image-container">
         {image ? (
           <Card.Img src={image} className="image pb-2" />
