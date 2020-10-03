@@ -46,6 +46,10 @@ const resolvers = {
       const ascents = await ascentCollection.find({}).toArray();
       return ascents;
     },
+    images: async () => {
+      const images = await imageCollection.find({}).toArray();
+      return images;
+    },
   },
   Mutation: {
     createSummit: async (parent, args) => {
@@ -97,6 +101,22 @@ const resolvers = {
       });
       return deleted.deletedCount ? args._id : null;
     },
+    createImage: async (parent, args) => {
+      const image = args;
+      image.createdAt = Date.now();
+      const res = await imageCollection.insertOne(image);
+      return res.ops[0];
+    },
+    deleteImage: async (parent, args) => {
+      const deleted = await imageCollection.deleteOne({
+        _id: new db.ObjectID(args._id),
+      });
+      return deleted.deletedCount ? args._id : null;
+    },
+    deleteImages: async () => {
+      const deleted = await imageCollection.deleteMany();
+      return deleted.deletedCount;
+    },
   },
 };
 
@@ -118,6 +138,7 @@ connectToMongoDb().then((res) => {
     tripCollection,
     ascentCollection,
     bucketlistCollection,
+    imageCollection,
   ] = res;
 });
 

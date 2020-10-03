@@ -2,6 +2,7 @@ type Query {
   summits: [Summit]!
   trips: [Trip]!
   ascents: [Ascent]!
+  images: [Image]!
 }
 
 type Mutation {
@@ -18,14 +19,16 @@ type Mutation {
   ): Trip
   deleteTrip(_id: ID!): ID
   deleteTrips: Int
+  createImage(tripId: ID, summitIds: [ID]): Image
+  deleteImage(_id: ID!): ID
+  deleteImages: Int
 }
 
 type Image {
   _id: ID!
-  trip: Trip!
+  trip: Trip
   summits: [Summit]
   createdAt: String!
-  updatedAt: String!
 }
 
 type Summit {

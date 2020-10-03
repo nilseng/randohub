@@ -26,7 +26,8 @@ const TripCard = ({ trip }) => {
   }, []);
   return (
     <Card className="card" bg="dark">
-      <p>{date}</p>
+      {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
+      <p className="small text-right mb-0">{date}</p>
       <div className="image-container">
         {image ? (
           <Card.Img src={image} className="image pb-2" />
@@ -34,7 +35,6 @@ const TripCard = ({ trip }) => {
           <ImagePlaceholder />
         )}
       </div>
-      {trip.name && <Card.Title>{trip.name}</Card.Title>}
     </Card>
   );
 };
