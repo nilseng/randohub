@@ -17,13 +17,13 @@ const TripCard = ({ trip }) => {
     })
   );
 
-  useEffect(() => {
+  /*   useEffect(() => {
     fetch("/s3/object/rasletind.jpg").then(async (res) => {
       const imageBlob = await res.blob();
       const imageUrl = URL.createObjectURL(imageBlob);
       setImage(imageUrl);
     });
-  }, []);
+  }, []); */
   return (
     <Card className="card" bg="dark">
       {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
