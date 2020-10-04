@@ -16,6 +16,9 @@ const GET_TRIPS = gql`
       name
       description
       createdAt
+      images {
+        _id
+      }
     }
   }
 `;
@@ -27,6 +30,9 @@ const CREATE_TRIP = gql`
       name
       description
       createdAt
+      images {
+        _id
+      }
     }
   }
 `;
@@ -50,6 +56,9 @@ const UPDATE_TRIP = gql`
       name
       description
       createdAt
+      images {
+        _id
+      }
     }
   }
 `;
@@ -61,23 +70,13 @@ const Feed = () => {
 
   if (error) console.log(error);
 
-  // TODO: Update cache only onSave?
-  const [createTrip] = useMutation(CREATE_TRIP, {
-    update(cache, { data: { createTrip } }) {
-      const { trips } = cache.readQuery({ query: GET_TRIPS });
-      cache.writeQuery({
-        query: GET_TRIPS,
-        data: { trips: [createTrip, ...trips] },
-      });
-    },
-  });
+  const [createTrip] = useMutation(CREATE_TRIP);
 
   const [updateTrip] = useMutation(UPDATE_TRIP, {
     update(cache, { data: { updateTrip } }) {
       const { trips } = cache.readQuery({ query: GET_TRIPS });
-      trips
-        .filter((trip) => trip._id === updateTrip._id)
-        .map((trip) => (trip = updateTrip));
+      trips.filter((trip) => trip._id !== updateTrip._id);
+      trips.unshift(updateTrip);
       cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
     },
   });
