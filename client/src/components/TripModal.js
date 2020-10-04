@@ -6,17 +6,27 @@ import Image from "react-bootstrap/Image";
 import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import gql from "graphql-tag";
 
 import "../styles/TripModal.scss";
 import ImagePlaceholder from "./ImagePlaceholder";
+import { useMutation } from "react-apollo";
 
 const defaultTrip = {
   _id: null,
   name: "Topptur",
   description: null,
   summitIds: null,
-  imageIds: null,
+  imageIds: [],
 };
+
+const CREATE_IMAGE = gql`
+  mutation createImage($tripId: ID) {
+    createImage(tripId: $tripId) {
+      _id
+    }
+  }
+`;
 
 const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
   const [trip, setTrip] = useState(defaultTrip);
@@ -28,6 +38,7 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
   };
 
   const onSave = async () => {
+    await saveImages();
     await updateTrip({ variables: trip });
     handleClose();
   };
@@ -42,6 +53,25 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
     setFiles(Array.from(files));
   };
 
+  const saveImages = async () => {
+    const formData = new FormData();
+    if (files)
+      for (const image of Array.from(files)) {
+        formData.append("images", image);
+        const imageInfo = await createImage({
+          variables: { tripId: trip._id },
+        });
+        trip.imageIds.push(imageInfo.data.createImage._id);
+        formData.append("imageIds", imageInfo.data.createImage._id);
+      }
+    await fetch("/s3/object", {
+      method: "POST",
+      body: formData,
+    });
+  };
+
+  const [createImage] = useMutation(CREATE_IMAGE);
+
   return showModal ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
       <Modal.Header>
@@ -49,7 +79,6 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
           <Form.Group>
             <Form.Label>Navn på turen</Form.Label>
             <Form.Control
-              placeholder='F.eks. "Fin tur på Rasletind!"'
               value={trip.name}
               onChange={(e) => setTrip({ ...trip, name: e.target.value })}
             ></Form.Control>
