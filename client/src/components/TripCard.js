@@ -17,13 +17,16 @@ const TripCard = ({ trip }) => {
     })
   );
 
-  /*   useEffect(() => {
-    fetch("/s3/object/rasletind.jpg").then(async (res) => {
-      const imageBlob = await res.blob();
-      const imageUrl = URL.createObjectURL(imageBlob);
-      setImage(imageUrl);
-    });
-  }, []); */
+  useEffect(() => {
+    // TODO: Get file type from image
+    if (trip.images?.length > 0) {
+      fetch(`/s3/object/${trip.images[0]._id}.jpg`).then(async (res) => {
+        const imageBlob = await res.blob();
+        const imageUrl = URL.createObjectURL(imageBlob);
+        setImage(imageUrl);
+      });
+    }
+  }, [trip.images]);
   return (
     <Card className="card" bg="dark">
       {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
