@@ -81,6 +81,7 @@ const resolvers = {
     updateTrip: async (parent, args) => {
       const trip = args;
       trip.updatedAt = Date.now();
+      trip.imageIds = trip.imageIds.map((id) => new db.ObjectID(id));
       const { _id, ...props } = trip;
       const res = await tripCollection.findOneAndUpdate(
         {
@@ -104,6 +105,7 @@ const resolvers = {
     createImage: async (parent, args) => {
       const image = args;
       image.createdAt = Date.now();
+      image.tripId = new db.ObjectID(image.tripId);
       const res = await imageCollection.insertOne(image);
       return res.ops[0];
     },
@@ -116,6 +118,22 @@ const resolvers = {
     deleteImages: async () => {
       const deleted = await imageCollection.deleteMany();
       return deleted.deletedCount;
+    },
+  },
+  Trip: {
+    images: async (parent) => {
+      const images = await imageCollection
+        .find({ tripId: new db.ObjectID(parent._id) })
+        .toArray();
+      return images;
+    },
+  },
+  Image: {
+    trip: async (parent) => {
+      const trip = await tripCollection.findOne({
+        imageIds: new db.ObjectID(parent._id),
+      });
+      return trip;
     },
   },
 };
