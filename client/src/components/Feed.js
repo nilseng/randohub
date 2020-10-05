@@ -5,6 +5,7 @@ import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo";
+import { useAuth0 } from "../react-auth0-spa";
 
 import TripCard from "./TripCard";
 import TripModal from "./TripModal";
@@ -64,6 +65,8 @@ const UPDATE_TRIP = gql`
 `;
 
 const Feed = () => {
+  const { user } = useAuth0();
+
   const [showModal, setShowModal] = useState(false);
 
   const { loading, error, data } = useQuery(GET_TRIPS);
@@ -83,9 +86,11 @@ const Feed = () => {
 
   return (
     <Container className="py-4">
-      <Button onClick={() => setShowModal(true)}>
-        <FaIcon icon={faPlus} className="mr-2"></FaIcon>Legg til tur
-      </Button>
+      {user && (
+        <Button onClick={() => setShowModal(true)}>
+          <FaIcon icon={faPlus} className="mr-2"></FaIcon>Legg til tur
+        </Button>
+      )}
       <TripModal
         showModal={showModal}
         setShowModal={setShowModal}

@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useAuth0 } from "../react-auth0-spa";
 
 import SummitModal from "./SummitModal";
 
@@ -31,6 +32,8 @@ const CREATE_SUMMIT = gql`
 `;
 
 const Summits = () => {
+  const { user } = useAuth0();
+
   const [showModal, setShowModal] = useState(false);
 
   const { loading, error, data } = useQuery(GET_SUMMITS);
@@ -56,10 +59,12 @@ const Summits = () => {
       }}
     >
       <Container style={{ padding: "1rem 0" }}>
-        <Button onClick={() => setShowModal(true)}>
-          <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Add
-          Summit
-        </Button>
+        {user && (
+          <Button onClick={() => setShowModal(true)}>
+            <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Add
+            Summit
+          </Button>
+        )}
         <SummitModal
           showModal={showModal}
           setShowModal={setShowModal}
