@@ -63,3 +63,15 @@ type Ascent {
 type Bucketlist {
   summits: [Summit]!
 }
+
+type User {
+  sub: String!
+  email: String!
+  nickname: String
+  name: String
+  picture: String
+  updated_at: String
+  email_verified: Boolean
+  iat: Int
+  exp: Int
+}

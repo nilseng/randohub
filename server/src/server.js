@@ -144,6 +144,7 @@ const server = new apollo.ApolloServer({
   context: async ({ req }) => {
     const token = req.headers.authorization || "";
     const user = await isTokenValid(token);
+    return { user };
   },
 });
 
