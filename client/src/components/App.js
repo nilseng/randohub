@@ -2,7 +2,7 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import history from "../utils/history";
 
-import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "../containers/PrivateRoute";
 import NavBar from "./NavBar";
 import Profile from "./Profile";
 import Feed from "./Feed";

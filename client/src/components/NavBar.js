@@ -11,7 +11,7 @@ import {
   faKey,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useAuth0 } from "../react-auth0-spa";
+import { useAuth0 } from "../containers/react-auth0-spa";
 
 import "../styles/NavBar.scss";
 

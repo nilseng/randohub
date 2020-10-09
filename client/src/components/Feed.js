@@ -5,7 +5,7 @@ import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo";
-import { useAuth0 } from "../react-auth0-spa";
+import { useAuth0 } from "../containers/react-auth0-spa";
 
 import TripCard from "./TripCard";
 import TripModal from "./TripModal";
