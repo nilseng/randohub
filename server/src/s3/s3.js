@@ -7,12 +7,17 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const isTokenValid = require("../auth/validate");
+
 // Configuration for aws s3
 aws.config.update({ region: "eu-west-1" });
 const s3 = new aws.S3();
 const defaultBucket = "randohub";
 
-router.post("/object", upload.array("images"), (req, res) => {
+router.post("/object", upload.array("images"), async (req, res) => {
+  const token = req.headers.authorization || "";
+  const user = await isTokenValid(token);
+  if (!user) return res.status(401).json({ Error: "User not authenticated" });
   if (!req.body || !req.body.imageIds)
     return res.status(400).json({ Error: "No imageIds in request" });
   if (!req.files || !req.files.length === 0)

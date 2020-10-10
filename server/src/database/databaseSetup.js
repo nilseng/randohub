@@ -14,6 +14,7 @@ const connectToMongoDb = async () => {
     `Mongoclient connected to database server:${client.isConnected()}`
   );
 
+  const users = client.db().collection("users");
   const summits = client.db().collection("summits");
   const trips = client.db().collection("trips");
   const ascents = client.db().collection("ascents");
@@ -53,7 +54,7 @@ const connectToMongoDb = async () => {
     });
   });
 
-  return [summits, trips, ascents, bucketlist, images];
+  return [users, summits, trips, ascents, bucketlist, images];
 };
 
 module.exports = connectToMongoDb;

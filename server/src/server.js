@@ -32,6 +32,11 @@ app.use("/s3", s3);
 
 app.use(express.static(path.join(__dirname, "../../client/build")));
 
+const updateUser = (user) => {
+  user.updatedInDbAt = Date.now();
+  userCollection.updateOne({ sub: user.sub }, { $set: user }, { upsert: true });
+};
+
 const resolvers = {
   Query: {
     summits: async () => {
@@ -52,7 +57,9 @@ const resolvers = {
     },
   },
   Mutation: {
-    createSummit: async (parent, args) => {
+    createSummit: async (parent, args, context) => {
+      if (!context.user) return;
+      updateUser(context.user);
       const summit = args;
       const now = Date.now();
       summit.createdAt = now;
@@ -60,17 +67,21 @@ const resolvers = {
       const res = await summitCollection.insertOne(summit);
       return res.ops[0];
     },
-    deleteSummit: async (parent, args) => {
+    deleteSummit: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await summitCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
-    deleteSummits: async () => {
+    deleteSummits: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await summitCollection.deleteMany();
       return deleted.deletedCount;
     },
-    createTrip: async (parent, args) => {
+    createTrip: async (parent, args, context) => {
+      if (!context.user) return;
+      updateUser(context.user);
       const trip = args;
       const now = Date.now();
       trip.createdAt = now;
@@ -78,7 +89,9 @@ const resolvers = {
       const res = await tripCollection.insertOne(trip);
       return res.ops[0];
     },
-    updateTrip: async (parent, args) => {
+    updateTrip: async (parent, args, context) => {
+      if (!context.user) return;
+      updateUser(context.user);
       const trip = args;
       trip.updatedAt = Date.now();
       trip.imageIds = trip.imageIds.map((id) => new db.ObjectID(id));
@@ -92,30 +105,35 @@ const resolvers = {
       );
       return res.value ? res.value : null;
     },
-    deleteTrips: async () => {
+    deleteTrips: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await tripCollection.deleteMany();
       return deleted.deletedCount;
     },
-    deleteTrip: async (parent, args) => {
+    deleteTrip: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await tripCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
-    createImage: async (parent, args) => {
+    createImage: async (parent, args, context) => {
+      if (!context.user) return;
       const image = args;
       image.createdAt = Date.now();
       image.tripId = new db.ObjectID(image.tripId);
       const res = await imageCollection.insertOne(image);
       return res.ops[0];
     },
-    deleteImage: async (parent, args) => {
+    deleteImage: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await imageCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
-    deleteImages: async () => {
+    deleteImages: async (parent, args, context) => {
+      if (!context.user) return;
       const deleted = await imageCollection.deleteMany();
       return deleted.deletedCount;
     },
@@ -150,9 +168,14 @@ const server = new apollo.ApolloServer({
 
 server.applyMiddleware({ app });
 
-let summitCollection, tripCollection, ascentCollection, bucketlistCollection;
+let summitCollection,
+  tripCollection,
+  ascentCollection,
+  bucketlistCollection,
+  userCollection;
 connectToMongoDb().then((res) => {
   [
+    userCollection,
     summitCollection,
     tripCollection,
     ascentCollection,
