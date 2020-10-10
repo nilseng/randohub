@@ -37,6 +37,8 @@ type Summit {
   height: Int!
   createdAt: String!
   updatedAt: String!
+  createdBy: User!
+  updatedBy: User!
 }
 
 type Trip {
@@ -48,6 +50,7 @@ type Trip {
   startedAt: String
   createdAt: String
   updatedAt: String
+  createdBy: User!
 }
 
 type Ascent {
@@ -58,10 +61,12 @@ type Ascent {
   startedAt: String!
   createdAt: String!
   updatedAt: String!
+  createdBy: User!
 }
 
 type Bucketlist {
   summits: [Summit]!
+  createdBy: User!
 }
 
 type User {
