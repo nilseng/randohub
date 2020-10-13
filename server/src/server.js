@@ -148,6 +148,20 @@ const resolvers = {
         .toArray();
       return images;
     },
+    createdBy: async (parent) => {
+      const user = await userCollection.findOne({
+        sub: new db.ObjectID(parent.sub),
+      });
+      return user;
+    },
+  },
+  Summit: {
+    createdBy: async (parent) => {
+      const user = await userCollection.findOne({
+        sub: new db.ObjectID(parent.sub),
+      });
+      return user;
+    },
   },
   Image: {
     trip: async (parent) => {
@@ -155,6 +169,12 @@ const resolvers = {
         imageIds: new db.ObjectID(parent._id),
       });
       return trip;
+    },
+    createdBy: async (parent) => {
+      const user = await userCollection.findOne({
+        sub: new db.ObjectID(parent.sub),
+      });
+      return user;
     },
   },
 };

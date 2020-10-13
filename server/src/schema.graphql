@@ -39,7 +39,6 @@ type Summit {
   createdAt: String!
   updatedAt: String!
   createdBy: User!
-  updatedBy: User!
 }
 
 type Trip {
