@@ -59,8 +59,9 @@ const resolvers = {
   Mutation: {
     createSummit: async (parent, args, context) => {
       if (!context.user) return;
-      updateUser(context.user);
+      updateUser(context.user); // Updating user info in DB every time something is created or updated
       const summit = args;
+      summit.sub = context.user.sub;
       const now = Date.now();
       summit.createdAt = now;
       summit.updatedAt = now;
@@ -83,6 +84,7 @@ const resolvers = {
       if (!context.user) return;
       updateUser(context.user);
       const trip = args;
+      trip.sub = context.user.sub;
       const now = Date.now();
       trip.createdAt = now;
       trip.updatedAt = now;
@@ -91,8 +93,8 @@ const resolvers = {
     },
     updateTrip: async (parent, args, context) => {
       if (!context.user) return;
-      updateUser(context.user);
       const trip = args;
+      updateUser(context.user);
       trip.updatedAt = Date.now();
       trip.imageIds = trip.imageIds.map((id) => new db.ObjectID(id));
       const { _id, ...props } = trip;
@@ -120,6 +122,7 @@ const resolvers = {
     createImage: async (parent, args, context) => {
       if (!context.user) return;
       const image = args;
+      image.sub = context.user.sub;
       image.createdAt = Date.now();
       image.tripId = new db.ObjectID(image.tripId);
       const res = await imageCollection.insertOne(image);

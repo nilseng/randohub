@@ -29,6 +29,7 @@ type Image {
   trip: Trip
   summits: [Summit]
   createdAt: String!
+  createdBy: User!
 }
 
 type Summit {

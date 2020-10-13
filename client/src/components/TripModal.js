@@ -7,10 +7,13 @@ import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
+import { useMutation } from "react-apollo";
+
+import { useAuth0 } from "../containers/react-auth0-spa";
+
+import ImagePlaceholder from "./ImagePlaceholder";
 
 import "../styles/TripModal.scss";
-import ImagePlaceholder from "./ImagePlaceholder";
-import { useMutation } from "react-apollo";
 
 const defaultTrip = {
   _id: null,
@@ -29,10 +32,14 @@ const CREATE_IMAGE = gql`
 `;
 
 const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
+  const { getTokenSilently } = useAuth0();
+  let token;
+
   const [trip, setTrip] = useState(defaultTrip);
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
+    token = await getTokenSilently(); // Make sure token is retrieved before trip is created and updated - needs to be passed to s3 endpoint
     const tripWithId = await createTrip();
     setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
   };
@@ -55,7 +62,7 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
 
   const saveImages = async () => {
     const formData = new FormData();
-    if (files)
+    if (files) {
       for (const image of Array.from(files)) {
         formData.append("images", image);
         const imageInfo = await createImage({
@@ -64,10 +71,14 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
         trip.imageIds.push(imageInfo.data.createImage._id);
         formData.append("imageIds", imageInfo.data.createImage._id);
       }
-    await fetch("/s3/object", {
-      method: "POST",
-      body: formData,
-    });
+      await fetch("/s3/object", {
+        headers: {
+          authorization: token,
+        },
+        method: "POST",
+        body: formData,
+      });
+    }
   };
 
   const [createImage] = useMutation(CREATE_IMAGE);
