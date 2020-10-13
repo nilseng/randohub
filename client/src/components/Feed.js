@@ -37,6 +37,9 @@ const CREATE_TRIP = gql`
       images {
         _id
       }
+      createdBy {
+        name
+      }
     }
   }
 `;
@@ -62,6 +65,9 @@ const UPDATE_TRIP = gql`
       createdAt
       images {
         _id
+      }
+      createdBy {
+        name
       }
     }
   }
