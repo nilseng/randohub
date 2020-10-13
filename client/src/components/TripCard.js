@@ -29,8 +29,11 @@ const TripCard = ({ trip }) => {
   }, [trip.images]);
   return (
     <Card className="card" bg="dark">
+      {date && <p className="small mb-0">{date}</p>}
+      {trip.createdBy?.name && (
+        <p className="small text-muted">{trip.createdBy.name}</p>
+      )}
       {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
-      <p className="small text-right mb-0">{date}</p>
       <div className="image-container">
         {image ? (
           <Card.Img src={image} className="image pb-2" />

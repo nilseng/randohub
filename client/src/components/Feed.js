@@ -20,6 +20,9 @@ const GET_TRIPS = gql`
       images {
         _id
       }
+      createdBy {
+        name
+      }
     }
   }
 `;

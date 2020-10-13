@@ -150,7 +150,7 @@ const resolvers = {
     },
     createdBy: async (parent) => {
       const user = await userCollection.findOne({
-        sub: new db.ObjectID(parent.sub),
+        sub: parent.sub,
       });
       return user;
     },
@@ -158,7 +158,7 @@ const resolvers = {
   Summit: {
     createdBy: async (parent) => {
       const user = await userCollection.findOne({
-        sub: new db.ObjectID(parent.sub),
+        sub: parent.sub,
       });
       return user;
     },
@@ -172,7 +172,7 @@ const resolvers = {
     },
     createdBy: async (parent) => {
       const user = await userCollection.findOne({
-        sub: new db.ObjectID(parent.sub),
+        sub: parent.sub,
       });
       return user;
     },
