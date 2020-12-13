@@ -5,6 +5,7 @@ const apollo = require("apollo-server-express");
 const fs = require("fs");
 const db = require("mongodb");
 const morgan = require("morgan");
+const sslRedirect = require("heroku-ssl-redirect").default;
 
 require("dotenv").config();
 
@@ -17,6 +18,8 @@ const typeDefs = fs.readFileSync(
 );
 
 const app = express();
+
+app.use(sslRedirect());
 
 app.use(
   bodyParser.urlencoded({
@@ -215,13 +218,3 @@ app.use(
   "/*",
   express.static(path.join(__dirname, "../../client/build", "index.html"))
 );
-
-app.use((req, res, next) => {
-  if (
-    !req.secure &&
-    !req.headers.host === `localhost:${process.env.PORT || 4000}`
-  ) {
-    return res.redirect("https://" + req.headers.host + req.path);
-  }
-  next();
-});
