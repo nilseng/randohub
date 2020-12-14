@@ -27,14 +27,11 @@ router.post("/object", upload.array("images"), async (req, res) => {
   };
   for ([i, file] of req.files.entries()) {
     uploadParams.Body = file.buffer;
-    if (Array.isArray(req.body.imageIds))
-      uploadParams.Key = `${req.body.imageIds[i]}${path.extname(
-        file.originalname
-      )}`;
-    else
-      uploadParams.Key = `${req.body.imageIds}${path.extname(
-        file.originalname
-      )}`;
+    if (Array.isArray(req.body.imageIds)) {
+      uploadParams.Key = req.body.imageIds[i];
+    } else {
+      uploadParams.Key = req.body.imageIds;
+    }
     s3.upload(uploadParams, (err, data) => {
       if (err) console.log("Error", err);
       if (data) console.log("Upload Success", data.Location);

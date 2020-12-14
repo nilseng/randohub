@@ -20,7 +20,7 @@ const TripCard = ({ trip }) => {
   useEffect(() => {
     // TODO: Get file type from image
     if (trip.images?.length > 0) {
-      fetch(`/s3/object/${trip.images[0]._id}.jpeg`).then(async (res) => {
+      fetch(`/s3/object/${trip.images[0]._id}`).then(async (res) => {
         const imageBlob = await res.blob();
         const imageUrl = URL.createObjectURL(imageBlob);
         setImage(imageUrl);
