@@ -18,7 +18,6 @@ const TripCard = ({ trip }) => {
   );
 
   useEffect(() => {
-    // TODO: Get file type from image
     if (trip.images?.length > 0) {
       fetch(`/s3/object/${trip.images[0]._id}`).then(async (res) => {
         const imageBlob = await res.blob();
@@ -27,6 +26,7 @@ const TripCard = ({ trip }) => {
       });
     }
   }, [trip.images]);
+
   return (
     <Card className="card" bg="dark">
       {date && <p className="small mb-0">{date}</p>}

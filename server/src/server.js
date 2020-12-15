@@ -47,7 +47,10 @@ const resolvers = {
       return summits;
     },
     trips: async () => {
-      const trips = await tripCollection.find({}).toArray();
+      const trips = await tripCollection
+        .find({})
+        .sort({ updatedAt: -1 })
+        .toArray();
       return trips;
     },
     ascents: async () => {

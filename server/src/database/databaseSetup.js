@@ -17,6 +17,7 @@ const connectToMongoDb = async () => {
   const users = client.db().collection("users");
   const summits = client.db().collection("summits");
   const trips = client.db().collection("trips");
+  trips.createIndex({ updatedAt: 1 });
   const ascents = client.db().collection("ascents");
   const bucketlist = client.db().collection("bucketlist");
   const images = client.db().collection("images");
