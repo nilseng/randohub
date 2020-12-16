@@ -49,7 +49,7 @@ const resolvers = {
     trips: async () => {
       const trips = await tripCollection
         .find({})
-        .sort({ updatedAt: -1 })
+        .sort({ createdAt: -1 })
         .toArray();
       return trips;
     },
