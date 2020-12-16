@@ -28,15 +28,17 @@ const TripCard = ({ trip }) => {
   }, [trip.images]);
 
   return (
-    <Card className="card" bg="dark">
-      {date && <p className="small mb-0">{date}</p>}
-      {trip.createdBy?.name && (
-        <p className="small text-muted">{trip.createdBy.name}</p>
-      )}
-      {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
-      <div className="image-container">
+    <Card className="card my-1" bg="dark">
+      <div className="p-1">
+        {date && <p className="small mb-0">{date}</p>}
+        {trip.createdBy?.name && (
+          <p className="small text-muted">{trip.createdBy.name}</p>
+        )}
+        {trip.name && <Card.Title className="mb-0">{trip.name}</Card.Title>}
+      </div>
+      <div className="card-image-container">
         {image ? (
-          <Card.Img src={image} className="image pb-2" />
+          <Card.Img src={image} className="card-image rounded-0 pb-2" />
         ) : (
           <ImagePlaceholder />
         )}

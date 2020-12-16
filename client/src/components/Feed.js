@@ -94,7 +94,7 @@ const Feed = () => {
   });
 
   return (
-    <Container className="py-4">
+    <Container className="py-4 px-0">
       {user && (
         <Button onClick={() => setShowModal(true)}>
           <FaIcon icon={faPlus} className="mr-2"></FaIcon>Legg til tur
