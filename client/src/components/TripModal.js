@@ -18,7 +18,7 @@ import "../styles/TripModal.scss";
 const defaultTrip = {
   _id: null,
   name: "Topptur",
-  description: null,
+  description: "",
   summitIds: null,
   imageIds: [],
 };
@@ -129,6 +129,16 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
               Last opp bilder fra turen!
             </Form.File.Label>
           </Form.File>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Beskrivelse</Form.Label>
+          <Form.Control
+            value={trip.description}
+            onChange={(e) => setTrip({ ...trip, description: e.target.value })}
+            placeholder="Hvordan var turen?"
+            as="textarea"
+            rows={3}
+          />
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>

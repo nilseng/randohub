@@ -12,8 +12,6 @@ const TripCard = ({ trip }) => {
       year: "numeric",
       month: "numeric",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
     })
   );
 
@@ -43,6 +41,7 @@ const TripCard = ({ trip }) => {
           <ImagePlaceholder />
         )}
       </div>
+      {trip.description && <p className="text-muted">{trip.description}</p>}
     </Card>
   );
 };
