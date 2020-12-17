@@ -91,7 +91,7 @@ const defaultTrip = {
 };
 
 const Feed = () => {
-  const { user } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
   const [trip, setTrip] = useState(defaultTrip);
 
@@ -119,6 +119,8 @@ const Feed = () => {
       cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
     },
   });
+
+  if (isLoading) return null;
 
   return (
     <Container className="py-4 px-0">
