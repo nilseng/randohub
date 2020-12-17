@@ -36,12 +36,11 @@ const TripModal = ({
   const { getTokenSilently, loading } = useAuth0();
   const [token, setToken] = useState();
 
-  const fetchAndSetToken = async () => {
-    const token = await getTokenSilently();
-    setToken(token);
-  };
-
   useEffect(() => {
+    const fetchAndSetToken = async () => {
+      const token = await getTokenSilently();
+      setToken(token);
+    };
     if (!loading) {
       fetchAndSetToken();
     }
