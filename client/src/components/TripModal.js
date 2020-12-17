@@ -33,7 +33,7 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
-  const { getTokenSilently, isLoading } = useAuth0();
+  const { getTokenSilently, loading } = useAuth0();
 
   const [files, setFiles] = useState();
 
@@ -89,7 +89,7 @@ const TripModal = ({
 
   const [createImage] = useMutation(CREATE_IMAGE);
 
-  if (isLoading) return null;
+  if (loading) return null;
 
   return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>

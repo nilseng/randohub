@@ -91,7 +91,7 @@ const defaultTrip = {
 };
 
 const Feed = () => {
-  const { user, isLoading } = useAuth0();
+  const { user, loading: loadingAuth } = useAuth0();
 
   const [trip, setTrip] = useState(defaultTrip);
 
@@ -120,7 +120,7 @@ const Feed = () => {
     },
   });
 
-  if (isLoading) return null;
+  if (loadingAuth) return null;
 
   return (
     <Container className="py-4 px-0">

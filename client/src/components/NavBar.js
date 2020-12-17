@@ -16,8 +16,10 @@ import { useAuth0 } from "../containers/react-auth0-spa";
 import "../styles/NavBar.scss";
 
 const NavBar = () => {
-  const { isLoading, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  if (isLoading) return null;
+  const { loading, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  if (loading) return null;
+
   return (
     <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
       <Navbar.Brand style={{ color: "#f8f9fa" }} href="/">
