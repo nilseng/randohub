@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 import Carousel from "react-bootstrap/Carousel";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 
@@ -15,14 +15,6 @@ import ImagePlaceholder from "./ImagePlaceholder";
 
 import "../styles/TripModal.scss";
 
-const defaultTrip = {
-  _id: null,
-  name: "Topptur",
-  description: "",
-  summitIds: null,
-  imageIds: [],
-};
-
 const CREATE_IMAGE = gql`
   mutation createImage($tripId: ID) {
     createImage(tripId: $tripId) {
@@ -31,22 +23,35 @@ const CREATE_IMAGE = gql`
   }
 `;
 
-const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
+const TripModal = ({
+  trip,
+  setTrip,
+  defaultTrip,
+  showModal,
+  setShowModal,
+  createTrip,
+  updateTrip,
+  deleteTrip,
+}) => {
   const { getTokenSilently } = useAuth0();
-  let token;
 
-  const [trip, setTrip] = useState(defaultTrip);
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
-    token = await getTokenSilently(); // Make sure token is retrieved before trip is created and updated - needs to be passed to s3 endpoint
-    const tripWithId = await createTrip();
-    setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
+    if (!trip._id) {
+      const tripWithId = await createTrip();
+      setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
+    }
   };
 
   const onSave = async () => {
     await saveImages();
     await updateTrip({ variables: trip });
+    handleClose();
+  };
+
+  const onDiscard = async () => {
+    if (trip._id) await deleteTrip({ variables: { _id: trip._id } });
     handleClose();
   };
 
@@ -71,6 +76,7 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
         trip.imageIds.push(imageInfo.data.createImage._id);
         formData.append("imageIds", imageInfo.data.createImage._id);
       }
+      const token = await getTokenSilently();
       await fetch("/s3/object", {
         headers: {
           authorization: token,
@@ -83,7 +89,7 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
 
   const [createImage] = useMutation(CREATE_IMAGE);
 
-  return showModal ? (
+  return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
       <Modal.Header>
         <Modal.Title className="w-100">
@@ -142,9 +148,13 @@ const TripModal = ({ showModal, setShowModal, createTrip, updateTrip }) => {
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
+        <Button variant="secondary" onClick={() => onDiscard()}>
+          Forkast
+          <FaIcon icon={faTrash} className="ml-1" />
+        </Button>
         <Button onClick={() => onSave()}>
           Lagre
-          <FaIcon icon={faCheck} style={{ marginLeft: "0.4rem" }} />
+          <FaIcon icon={faCheck} className="ml-1" />
         </Button>
       </Modal.Footer>
     </Modal>

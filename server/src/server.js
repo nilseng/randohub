@@ -87,7 +87,7 @@ const resolvers = {
       return deleted.deletedCount;
     },
     createTrip: async (parent, args, context) => {
-      if (!context.user) return;
+      if (!(context.user && context.user.sub)) return;
       updateUser(context.user);
       const trip = args;
       trip.sub = context.user.sub;
@@ -98,11 +98,12 @@ const resolvers = {
       return res.ops[0];
     },
     updateTrip: async (parent, args, context) => {
-      if (!context.user) return;
+      if (!(context.user && context.user.sub)) return;
       const trip = args;
       updateUser(context.user);
       trip.updatedAt = Date.now();
-      trip.imageIds = trip.imageIds.map((id) => new db.ObjectID(id));
+      if (trip.imageIds)
+        trip.imageIds = trip.imageIds.map((id) => new db.ObjectID(id));
       const { _id, ...props } = trip;
       const res = await tripCollection.findOneAndUpdate(
         {

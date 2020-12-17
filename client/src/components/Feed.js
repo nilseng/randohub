@@ -21,6 +21,7 @@ const GET_TRIPS = gql`
         _id
       }
       createdBy {
+        sub
         name
       }
     }
@@ -38,6 +39,7 @@ const CREATE_TRIP = gql`
         _id
       }
       createdBy {
+        sub
         name
       }
     }
@@ -67,14 +69,31 @@ const UPDATE_TRIP = gql`
         _id
       }
       createdBy {
+        sub
         name
       }
     }
   }
 `;
 
+const DELETE_TRIP = gql`
+  mutation DeleteTrip($_id: ID!) {
+    deleteTrip(_id: $_id)
+  }
+`;
+
+const defaultTrip = {
+  _id: null,
+  name: "Topptur",
+  description: "",
+  summitIds: null,
+  imageIds: [],
+};
+
 const Feed = () => {
   const { user } = useAuth0();
+
+  const [trip, setTrip] = useState(defaultTrip);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -86,9 +105,17 @@ const Feed = () => {
 
   const [updateTrip] = useMutation(UPDATE_TRIP, {
     update(cache, { data: { updateTrip } }) {
-      const { trips } = cache.readQuery({ query: GET_TRIPS });
-      trips.filter((trip) => trip._id !== updateTrip._id);
+      let { trips } = cache.readQuery({ query: GET_TRIPS });
+      trips = trips.filter((trip) => trip._id !== updateTrip._id);
       trips.unshift(updateTrip);
+      cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
+    },
+  });
+
+  const [deleteTrip] = useMutation(DELETE_TRIP, {
+    update(cache, { data: { deleteTrip } }) {
+      let { trips } = cache.readQuery({ query: GET_TRIPS });
+      trips = trips.filter((trip) => trip._id !== deleteTrip);
       cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
     },
   });
@@ -101,14 +128,25 @@ const Feed = () => {
         </Button>
       )}
       <TripModal
+        trip={trip}
+        setTrip={setTrip}
+        defaultTrip={defaultTrip}
         showModal={showModal}
         setShowModal={setShowModal}
         createTrip={createTrip}
         updateTrip={updateTrip}
+        deleteTrip={deleteTrip}
       />
       {loading && <div>loading...</div>}
       {data &&
-        data.trips.map((trip) => <TripCard key={trip._id} trip={trip} />)}
+        data.trips.map((trip) => (
+          <TripCard
+            key={trip._id}
+            trip={trip}
+            setTripToEdit={setTrip}
+            setShowModal={setShowModal}
+          />
+        ))}
     </Container>
   );
 };
