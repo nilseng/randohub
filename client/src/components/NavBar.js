@@ -18,8 +18,6 @@ import "../styles/NavBar.scss";
 const NavBar = () => {
   const { loading, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
-  if (loading) return null;
-
   return (
     <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
       <Navbar.Brand style={{ color: "#f8f9fa" }} href="/">
@@ -44,53 +42,61 @@ const NavBar = () => {
         style={{ outline: "none" }}
       />
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-        <Nav>
-          <Nav.Link href="/summits">
-            <FaIcon
-              icon={faMountain}
-              style={{ marginRight: "0.4rem" }}
-            ></FaIcon>
-            Topper
-          </Nav.Link>
-          {!isAuthenticated && (
-            <Nav.Item>
-              <Button
-                variant="link"
-                className="mr-2"
-                onClick={() => loginWithRedirect({})}
-              >
-                <FaIcon icon={faKey} style={{ marginRight: "0.4rem" }}></FaIcon>
-                Logg inn
-              </Button>
-            </Nav.Item>
-          )}
-          {isAuthenticated && (
-            <>
+        {!loading && (
+          <Nav>
+            <Nav.Link href="/summits">
+              <FaIcon
+                icon={faMountain}
+                style={{ marginRight: "0.4rem" }}
+              ></FaIcon>
+              Topper
+            </Nav.Link>
+            {!isAuthenticated && (
               <Nav.Item>
-                <Nav.Link href="/bucketlist">
+                <Button
+                  variant="link"
+                  className="mr-2"
+                  onClick={() => loginWithRedirect({})}
+                >
                   <FaIcon
-                    icon={faList}
+                    icon={faKey}
                     style={{ marginRight: "0.4rem" }}
                   ></FaIcon>
-                  Ønskelista
-                </Nav.Link>
+                  Logg inn
+                </Button>
               </Nav.Item>
-              <Nav.Item>
-                <Nav.Link href="/profile">
+            )}
+            {isAuthenticated && (
+              <>
+                <Nav.Item>
+                  <Nav.Link href="/bucketlist">
+                    <FaIcon
+                      icon={faList}
+                      style={{ marginRight: "0.4rem" }}
+                    ></FaIcon>
+                    Ønskelista
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="/profile">
+                    <FaIcon
+                      icon={faSkiingNordic}
+                      style={{ marginRight: "0.4rem" }}
+                    ></FaIcon>
+                    Profil
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Link className="mr-2" onClick={() => logout()}>
                   <FaIcon
-                    icon={faSkiingNordic}
+                    icon={faBan}
                     style={{ marginRight: "0.4rem" }}
                   ></FaIcon>
-                  Profil
+                  Logg ut
                 </Nav.Link>
-              </Nav.Item>
-              <Nav.Link className="mr-2" onClick={() => logout()}>
-                <FaIcon icon={faBan} style={{ marginRight: "0.4rem" }}></FaIcon>
-                Logg ut
-              </Nav.Link>
-            </>
-          )}
-        </Nav>
+              </>
+            )}
+          </Nav>
+        )}
       </Navbar.Collapse>
     </Navbar>
   );

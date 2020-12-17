@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -33,18 +33,7 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
-  const { getTokenSilently, loading } = useAuth0();
-  const [token, setToken] = useState();
-
-  useEffect(() => {
-    const fetchAndSetToken = async () => {
-      const token = await getTokenSilently();
-      setToken(token);
-    };
-    if (!loading) {
-      fetchAndSetToken();
-    }
-  }, [loading, getTokenSilently, setToken]);
+  const { getTokenSilently } = useAuth0();
 
   const [files, setFiles] = useState();
 
@@ -87,6 +76,7 @@ const TripModal = ({
         trip.imageIds.push(imageInfo.data.createImage._id);
         formData.append("imageIds", imageInfo.data.createImage._id);
       }
+      const token = await getTokenSilently();
       await fetch("/s3/object", {
         headers: {
           authorization: token,
@@ -98,8 +88,6 @@ const TripModal = ({
   };
 
   const [createImage] = useMutation(CREATE_IMAGE);
-
-  if (loading) return null;
 
   return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
