@@ -32,7 +32,7 @@ const isTokenValid = async (token) => {
             resolve({ error });
           }
           if (decoded) {
-            resolve(decoded);
+            resolve({ user: decoded });
           }
         }
       );

@@ -16,7 +16,8 @@ const defaultBucket = "randohub";
 
 router.post("/object", upload.array("images"), async (req, res) => {
   const token = req.headers.authorization || "";
-  const user = await isTokenValid(token);
+  const { user, error } = await isTokenValid(token);
+  console.log(user, error);
   if (!user) return res.status(401).json({ Error: "User not authenticated" });
   if (!req.body || !req.body.imageIds)
     return res.status(200).json({ Error: "No images in request" });

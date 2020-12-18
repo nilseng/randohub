@@ -64,7 +64,7 @@ const resolvers = {
   },
   Mutation: {
     createSummit: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       updateUser(context.user); // Updating user info in DB every time something is created or updated
       const summit = args;
       summit.sub = context.user.sub;
@@ -75,19 +75,19 @@ const resolvers = {
       return res.ops[0];
     },
     deleteSummit: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await summitCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
     deleteSummits: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await summitCollection.deleteMany();
       return deleted.deletedCount;
     },
     createTrip: async (parent, args, context) => {
-      if (!(context.user && context.user.sub)) return;
+      if (context.error) throw new Error(context.error);
       updateUser(context.user);
       const trip = args;
       trip.sub = context.user.sub;
@@ -98,7 +98,7 @@ const resolvers = {
       return res.ops[0];
     },
     updateTrip: async (parent, args, context) => {
-      if (!(context.user && context.user.sub)) return;
+      if (context.error) throw new Error(context.error);
       const trip = args;
       updateUser(context.user);
       trip.updatedAt = Date.now();
@@ -115,19 +115,19 @@ const resolvers = {
       return res.value ? res.value : null;
     },
     deleteTrips: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await tripCollection.deleteMany();
       return deleted.deletedCount;
     },
     deleteTrip: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await tripCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
     createImage: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const image = args;
       image.sub = context.user.sub;
       image.createdAt = Date.now();
@@ -136,14 +136,14 @@ const resolvers = {
       return res.ops[0];
     },
     deleteImage: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await imageCollection.deleteOne({
         _id: new db.ObjectID(args._id),
       });
       return deleted.deletedCount ? args._id : null;
     },
     deleteImages: async (parent, args, context) => {
-      if (!context.user) return;
+      if (context.error) throw new Error(context.error);
       const deleted = await imageCollection.deleteMany();
       return deleted.deletedCount;
     },
@@ -191,8 +191,8 @@ const server = new apollo.ApolloServer({
   resolvers,
   context: async ({ req }) => {
     const token = req.headers.authorization || "";
-    const user = await isTokenValid(token);
-    return { user };
+    const context = await isTokenValid(token);
+    return context;
   },
 });
 
