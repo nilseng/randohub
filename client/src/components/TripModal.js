@@ -33,14 +33,11 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
-  const { isAuthenticated, loginWithRedirect } = useAuth0();
+  const { loading } = useAuth0();
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
     if (!trip._id) {
-      if (!isAuthenticated) {
-        loginWithRedirect({});
-      }
       const tripWithId = await createTrip({ variables: trip });
       setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
     }
@@ -91,6 +88,8 @@ const TripModal = ({
   };
 
   const [createImage] = useMutation(CREATE_IMAGE);
+
+  if (loading) return null;
 
   return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
