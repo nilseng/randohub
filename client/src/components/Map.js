@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoibmlsc2VuZyIsImEiOiJja2lyYmZoNnoyNHRoMnlxam42M2FhYTRzIn0.bNB_zGEjaXfrs-4cfz6V6w";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl-unminified";
 
 const Map = () => {
+  mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
   const [mapState] = useState({
     lng: 8.739,
     lat: 61.448,
