@@ -9,13 +9,14 @@ import {
   faSkiingNordic,
   faBan,
   faKey,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth0 } from "../containers/react-auth0-spa";
 
 import "../styles/NavBar.scss";
 
-const NavBar = () => {
+const NavBar = ({ setShowModal }) => {
   const { loading, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   return (
@@ -44,6 +45,14 @@ const NavBar = () => {
       <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
         {!loading && (
           <Nav>
+            {isAuthenticated && (
+              <Nav.Link
+                className="btn btn-outline-primary mr-2"
+                onClick={() => setShowModal(true)}
+              >
+                <FaIcon icon={faPlus} className="mr-2"></FaIcon>Legg til tur
+              </Nav.Link>
+            )}
             <Nav.Link href="/summits">
               <FaIcon
                 icon={faMountain}

@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo";
-import { useAuth0 } from "../containers/react-auth0-spa";
 
 import TripCard from "./TripCard";
 import TripModal from "./TripModal";
@@ -29,8 +25,18 @@ const GET_TRIPS = gql`
 `;
 
 const CREATE_TRIP = gql`
-  mutation CreateTrip {
-    createTrip {
+  mutation CreateTrip(
+    $name: String
+    $description: String
+    $summitIds: [ID]
+    $imageIds: [ID]
+  ) {
+    createTrip(
+      name: $name
+      description: $description
+      summitIds: $summitIds
+      imageIds: $imageIds
+    ) {
       _id
       name
       description
@@ -82,26 +88,18 @@ const DELETE_TRIP = gql`
   }
 `;
 
-const defaultTrip = {
-  _id: null,
-  name: "Topptur",
-  description: "",
-  summitIds: null,
-  imageIds: [],
-};
-
-const Feed = () => {
-  const { user } = useAuth0();
-
-  const [trip, setTrip] = useState(defaultTrip);
-
-  const [showModal, setShowModal] = useState(false);
-
+const Feed = ({ trip, setTrip, defaultTrip, showModal, setShowModal }) => {
   const { loading, error, data } = useQuery(GET_TRIPS);
 
   if (error) console.log(error);
 
-  const [createTrip] = useMutation(CREATE_TRIP);
+  const [createTrip] = useMutation(CREATE_TRIP, {
+    update(cache, { data: { createTrip } }) {
+      const { trips } = cache.readQuery({ query: GET_TRIPS });
+      trips.unshift(createTrip);
+      cache.writeQuery({ query: GET_TRIPS, data: { trips: trips } });
+    },
+  });
 
   const [updateTrip] = useMutation(UPDATE_TRIP, {
     update(cache, { data: { updateTrip } }) {
@@ -122,11 +120,6 @@ const Feed = () => {
 
   return (
     <Container className="py-4 px-0">
-      {user && (
-        <Button onClick={() => setShowModal(true)}>
-          <FaIcon icon={faPlus} className="mr-2"></FaIcon>Legg til tur
-        </Button>
-      )}
       <TripModal
         trip={trip}
         setTrip={setTrip}

@@ -9,7 +9,7 @@ import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 
-import { useAuth0 } from "../containers/react-auth0-spa";
+import { getIdTokenClaims } from "../containers/react-auth0-spa";
 
 import ImagePlaceholder from "./ImagePlaceholder";
 
@@ -33,13 +33,11 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
-  const { getTokenSilently } = useAuth0();
-
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
     if (!trip._id) {
-      const tripWithId = await createTrip();
+      const tripWithId = await createTrip({ variables: trip });
       setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
     }
   };
@@ -76,10 +74,11 @@ const TripModal = ({
         trip.imageIds.push(imageInfo.data.createImage._id);
         formData.append("imageIds", imageInfo.data.createImage._id);
       }
-      const token = await getTokenSilently();
+      const token = await getIdTokenClaims();
+      if (!token) return;
       await fetch("/s3/object", {
         headers: {
-          authorization: token,
+          authorization: `Bearer ${token.__raw}`,
         },
         method: "POST",
         body: formData,
