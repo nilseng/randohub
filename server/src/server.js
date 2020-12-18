@@ -64,9 +64,12 @@ const resolvers = {
   },
   Mutation: {
     createSummit: async (parent, args, context) => {
-      if (context.error) throw new Error(context.error);
-      updateUser(context.user); // Updating user info in DB every time something is created or updated
       const summit = args;
+      if (context.error) throw new Error(context.error);
+      if (!context.user) {
+        throw new Error({ error: "Unauthorized" });
+      }
+      updateUser(context.user); // Updating user info in DB every time something is created or updated
       summit.sub = context.user.sub;
       const now = Date.now();
       summit.createdAt = now;

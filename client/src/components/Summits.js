@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
-import { useQuery, useMutation } from "react-apollo";
-import gql from "graphql-tag";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useAuth0 } from "../containers/react-auth0-spa";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
 
-import SummitModal from "./SummitModal";
+import { useHistory } from "react-router-dom";
 
-const GET_SUMMITS = gql`
+/* const GET_SUMMITS = gql`
   {
     summits {
       _id
@@ -29,14 +26,13 @@ const CREATE_SUMMIT = gql`
       createdAt
     }
   }
-`;
+`; */
 
 const Summits = () => {
-  const { user } = useAuth0();
+  // const { user } = useAuth0();
+  const history = useHistory();
 
-  const [showModal, setShowModal] = useState(false);
-
-  const { loading, error, data } = useQuery(GET_SUMMITS);
+  /* const { loading, error, data } = useQuery(GET_SUMMITS);
 
   if (error) console.log(error);
 
@@ -49,7 +45,7 @@ const Summits = () => {
       });
     },
   });
-
+ */
   return (
     <div
       style={{
@@ -59,10 +55,32 @@ const Summits = () => {
       }}
     >
       <Container style={{ padding: "1rem 0" }}>
-        {user && (
-          <Button onClick={() => setShowModal(true)}>
-            <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>Add
-            Summit
+        <Card
+          style={{
+            padding: "1rem",
+            margin: "1rem 0",
+            width: "27rem",
+            maxWidth: "100%",
+            color: "#f8f9fa",
+          }}
+          bg="dark"
+        >
+          <Card.Title>Høgdebrotet</Card.Title>
+          <Card.Body>
+            <div>2226 moh.</div>
+          </Card.Body>
+          <Button onClick={() => history.push("/map")}>
+            <FaIcon icon={faMap} className="mr-2" />
+            Se kart
+          </Button>
+        </Card>
+        {/* {user && (
+          <Button
+            variant="outline-primary text-light"
+            onClick={() => setShowModal(true)}
+          >
+            <FaIcon icon={faPlus} style={{ marginRight: "0.4rem" }}></FaIcon>
+            Legg til fjelltopp
           </Button>
         )}
         <SummitModal
@@ -86,10 +104,10 @@ const Summits = () => {
             >
               <Card.Title>{summit.name}</Card.Title>
               <Card.Body>
-                <div>Height: {summit.height}</div>
+                <div>Høyde: {summit.height}</div>
               </Card.Body>
             </Card>
-          ))}
+          ))} */}
       </Container>
     </div>
   );

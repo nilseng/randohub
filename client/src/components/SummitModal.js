@@ -17,8 +17,8 @@ const SummitModal = ({ showModal, setShowModal, createSummit }) => {
   };
 
   const handleClose = () => {
-    setSummitName(undefined);
-    setSummitHeight(undefined);
+    setSummitName("");
+    setSummitHeight("");
     setShowModal(false);
   };
 
@@ -27,9 +27,9 @@ const SummitModal = ({ showModal, setShowModal, createSummit }) => {
       <Modal.Header>
         <Modal.Title>
           <Form.Group>
-            <Form.Label>Summit Name</Form.Label>
+            <Form.Label className="h6">Fjelltopp</Form.Label>
             <Form.Control
-              placeholder="E.g. Galdhøpiggen"
+              placeholder="F.eks. Galdhøpiggen"
               value={summitName}
               onChange={(e) => setSummitName(e.target.value)}
             ></Form.Control>
@@ -38,10 +38,11 @@ const SummitModal = ({ showModal, setShowModal, createSummit }) => {
       </Modal.Header>
       <Modal.Body>
         <Form.Group>
-          <Form.Label>Height [mamsl.]</Form.Label>
+          <Form.Label>Høyde [moh]</Form.Label>
           <Form.Control
-            placeholder="E.g. 2469"
+            placeholder="F.eks. 2469"
             value={summitHeight}
+            type="number"
             onChange={(e) => setSummitHeight(e.target.value)}
           ></Form.Control>
         </Form.Group>

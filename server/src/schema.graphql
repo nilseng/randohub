@@ -41,6 +41,7 @@ type Summit {
   _id: ID!
   name: String!
   height: Int!
+  area: String
   createdAt: String!
   updatedAt: String!
   createdBy: User!

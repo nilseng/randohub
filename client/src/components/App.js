@@ -11,6 +11,7 @@ import Feed from "./Feed";
 import Summits from "./Summits";
 import BucketList from "./BucketList";
 import { useAuth0 } from "../containers/react-auth0-spa";
+import Map from "./Map";
 
 const defaultTrip = {
   _id: null,
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="/summits" component={Summits} />
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/bucketlist" component={BucketList} />
+          <Route path="/map" component={Map} />
         </Switch>
       </Router>
     </>
