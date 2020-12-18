@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -9,7 +9,7 @@ import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 
-import { getIdTokenClaims } from "../containers/react-auth0-spa";
+import { getIdTokenClaims, useAuth0 } from "../containers/react-auth0-spa";
 
 import ImagePlaceholder from "./ImagePlaceholder";
 
@@ -33,6 +33,7 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
+  const { loading, isAuthenticated, loginWithRedirect } = useAuth0();
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
@@ -87,6 +88,12 @@ const TripModal = ({
   };
 
   const [createImage] = useMutation(CREATE_IMAGE);
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      loginWithRedirect({});
+    }
+  }, [loading, isAuthenticated, loginWithRedirect]);
 
   return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
