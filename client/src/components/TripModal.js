@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -33,11 +33,14 @@ const TripModal = ({
   updateTrip,
   deleteTrip,
 }) => {
-  const { loading, isAuthenticated, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const [files, setFiles] = useState();
 
   const handleShow = async () => {
     if (!trip._id) {
+      if (!isAuthenticated) {
+        loginWithRedirect({});
+      }
       const tripWithId = await createTrip({ variables: trip });
       setTrip({ ...trip, _id: tripWithId.data.createTrip._id });
     }
@@ -88,12 +91,6 @@ const TripModal = ({
   };
 
   const [createImage] = useMutation(CREATE_IMAGE);
-
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      loginWithRedirect({});
-    }
-  }, [loading, isAuthenticated, loginWithRedirect]);
 
   return showModal && trip ? (
     <Modal show={showModal} onHide={handleClose} onShow={handleShow}>
