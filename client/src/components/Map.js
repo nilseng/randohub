@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-const mapboxgl = require("mapbox-gl/dist/mapbox-gl.js");
+import mapboxgl from "mapbox-gl";
 
 const Map = () => {
   mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
